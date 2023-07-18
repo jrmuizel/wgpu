@@ -70,7 +70,10 @@ impl super::CommandEncoder {
         }
         self.pass.dirty_root_elements = 0;
         self.pass.dirty_vertex_buffers = 0;
-        list.set_descriptor_heaps(&[self.shared.heap_views.raw.clone(), self.shared.heap_samplers.raw.clone()]);
+        list.set_descriptor_heaps(&[
+            self.shared.heap_views.raw.clone(),
+            self.shared.heap_samplers.raw.clone(),
+        ]);
     }
 
     unsafe fn end_pass(&mut self) {
@@ -292,7 +295,10 @@ impl crate::CommandEncoder<super::Api> for super::CommandEncoder {
     {
         self.temp.barriers.clear();
 
-        log::trace!("List {:p} buffer transitions", self.list.as_ref().unwrap().as_ptr());
+        log::trace!(
+            "List {:p} buffer transitions",
+            self.list.as_ref().unwrap().as_ptr()
+        );
         for barrier in barriers {
             log::trace!(
                 "\t{:p}: usage {:?}..{:?}",
@@ -334,7 +340,8 @@ impl crate::CommandEncoder<super::Api> for super::CommandEncoder {
 
         if !self.temp.barriers.is_empty() {
             unsafe {
-                self.list.as_ref()
+                self.list
+                    .as_ref()
                     .unwrap()
                     .ResourceBarrier(self.temp.barriers.len() as u32, self.temp.barriers.as_ptr())
             };
@@ -347,7 +354,10 @@ impl crate::CommandEncoder<super::Api> for super::CommandEncoder {
     {
         self.temp.barriers.clear();
 
-        log::trace!("List {:p} texture transitions", self.list.as_ref().unwrap().as_ptr());
+        log::trace!(
+            "List {:p} texture transitions",
+            self.list.as_ref().unwrap().as_ptr()
+        );
         for barrier in barriers {
             log::trace!(
                 "\t{:p}: usage {:?}..{:?}, range {:?}",
@@ -429,7 +439,8 @@ impl crate::CommandEncoder<super::Api> for super::CommandEncoder {
 
         if !self.temp.barriers.is_empty() {
             unsafe {
-                self.list.as_ref()
+                self.list
+                    .as_ref()
                     .unwrap()
                     .ResourceBarrier(self.temp.barriers.len() as u32, self.temp.barriers.as_ptr())
             };
@@ -595,14 +606,16 @@ impl crate::CommandEncoder<super::Api> for super::CommandEncoder {
 
     unsafe fn begin_query(&mut self, set: &super::QuerySet, index: u32) {
         unsafe {
-            self.list.as_ref()
+            self.list
+                .as_ref()
                 .unwrap()
                 .BeginQuery(set.raw.as_mut_ptr(), set.raw_ty, index)
         };
     }
     unsafe fn end_query(&mut self, set: &super::QuerySet, index: u32) {
         unsafe {
-            self.list.as_ref()
+            self.list
+                .as_ref()
                 .unwrap()
                 .EndQuery(set.raw.as_mut_ptr(), set.raw_ty, index)
         };
@@ -889,7 +902,8 @@ impl crate::CommandEncoder<super::Api> for super::CommandEncoder {
     unsafe fn insert_debug_marker(&mut self, label: &str) {
         let (wide_label, size) = self.temp.prepare_marker(label);
         unsafe {
-            self.list.as_ref()
+            self.list
+                .as_ref()
                 .unwrap()
                 .SetMarker(0, wide_label.as_ptr() as *const _, size)
         };
@@ -897,7 +911,8 @@ impl crate::CommandEncoder<super::Api> for super::CommandEncoder {
     unsafe fn begin_debug_marker(&mut self, group_label: &str) {
         let (wide_label, size) = self.temp.prepare_marker(group_label);
         unsafe {
-            self.list.as_ref()
+            self.list
+                .as_ref()
                 .unwrap()
                 .BeginEvent(0, wide_label.as_ptr() as *const _, size)
         };
@@ -991,9 +1006,12 @@ impl crate::CommandEncoder<super::Api> for super::CommandEncoder {
         instance_count: u32,
     ) {
         unsafe { self.prepare_draw(start_vertex as i32, start_instance) };
-        self.list.as_ref()
-            .unwrap()
-            .draw(vertex_count, instance_count, start_vertex, start_instance);
+        self.list.as_ref().unwrap().draw(
+            vertex_count,
+            instance_count,
+            start_vertex,
+            start_instance,
+        );
     }
     unsafe fn draw_indexed(
         &mut self,

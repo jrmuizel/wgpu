@@ -262,7 +262,6 @@ impl CpuHeap {
             ptr: self.start.ptr + (self.handle_size * index) as usize,
         }
     }
-
 }
 
 impl fmt::Debug for CpuHeap {

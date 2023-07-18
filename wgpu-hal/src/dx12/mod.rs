@@ -557,8 +557,7 @@ impl CompiledShader {
     unsafe fn destroy(self) {
         match self {
             CompiledShader::Dxc(_) => {}
-            CompiledShader::Fxc(shader) => unsafe {
-            },
+            CompiledShader::Fxc(shader) => unsafe {},
         }
     }
 }
@@ -678,7 +677,8 @@ impl crate::Surface<Api> for Surface {
                         profiling::scope!(
                             "IDXGIFactoryMedia::CreateSwapChainForCompositionSurfaceHandle"
                         );
-                        self.factory_media.clone()
+                        self.factory_media
+                            .clone()
                             .ok_or(crate::SurfaceError::Other("IDXGIFactoryMedia not found"))?
                             .create_swapchain_for_composition_surface_handle(
                                 device.present_queue.as_mut_ptr() as *mut _,
@@ -724,9 +724,7 @@ impl crate::Surface<Api> for Surface {
                 }
 
                 match unsafe { swap_chain1.cast::<dxgi1_4::IDXGISwapChain3>() }.into_result() {
-                    Ok(swap_chain3) => {
-                        swap_chain3
-                    }
+                    Ok(swap_chain3) => swap_chain3,
                     Err(err) => {
                         log::error!("Unable to cast swap chain: {}", err);
                         return Err(crate::SurfaceError::Other("swap chain cast to 3"));
