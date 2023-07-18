@@ -168,7 +168,7 @@ impl super::Device {
                 d3d12::DescriptorHeapType::CbvSrvUav,
             )),
             sampler_pool: Mutex::new(descriptor::CpuPool::new(
-                raw.clone(),
+                raw,
                 d3d12::DescriptorHeapType::Sampler,
             )),
             library: Arc::clone(library),
@@ -313,7 +313,7 @@ impl super::Device {
 }
 
 impl crate::Device<super::Api> for super::Device {
-    unsafe fn exit(mut self, queue: super::Queue) {
+    unsafe fn exit(mut self, _queue: super::Queue) {
         self.rtv_pool.lock().free_handle(self.null_rtv_handle);
         self.mem_allocator = None;
     }
@@ -698,7 +698,7 @@ impl crate::Device<super::Api> for super::Device {
             copy_counts: vec![1; num_views.max(num_samplers) as usize],
         })
     }
-    unsafe fn destroy_bind_group_layout(&self, bg_layout: super::BindGroupLayout) {}
+    unsafe fn destroy_bind_group_layout(&self, _bg_layout: super::BindGroupLayout) {}
 
     unsafe fn create_pipeline_layout(
         &self,
@@ -1060,7 +1060,7 @@ impl crate::Device<super::Api> for super::Device {
             },
         })
     }
-    unsafe fn destroy_pipeline_layout(&self, pipeline_layout: super::PipelineLayout) {}
+    unsafe fn destroy_pipeline_layout(&self, _pipeline_layout: super::PipelineLayout) {}
 
     unsafe fn create_bind_group(
         &self,
@@ -1437,7 +1437,7 @@ impl crate::Device<super::Api> for super::Device {
             vertex_strides,
         })
     }
-    unsafe fn destroy_render_pipeline(&self, pipeline: super::RenderPipeline) {}
+    unsafe fn destroy_render_pipeline(&self, _pipeline: super::RenderPipeline) {}
 
     unsafe fn create_compute_pipeline(
         &self,
@@ -1472,7 +1472,7 @@ impl crate::Device<super::Api> for super::Device {
             layout: desc.layout.shared.clone(),
         })
     }
-    unsafe fn destroy_compute_pipeline(&self, pipeline: super::ComputePipeline) {}
+    unsafe fn destroy_compute_pipeline(&self, _pipeline: super::ComputePipeline) {}
 
     unsafe fn create_query_set(
         &self,
@@ -1505,7 +1505,7 @@ impl crate::Device<super::Api> for super::Device {
 
         Ok(super::QuerySet { raw, raw_ty })
     }
-    unsafe fn destroy_query_set(&self, set: super::QuerySet) {}
+    unsafe fn destroy_query_set(&self, _set: super::QuerySet) {}
 
     unsafe fn create_fence(&self) -> Result<super::Fence, crate::DeviceError> {
         let mut raw = d3d12::Fence::null();
@@ -1520,7 +1520,7 @@ impl crate::Device<super::Api> for super::Device {
         hr.into_device_result("Fence creation")?;
         Ok(super::Fence { raw })
     }
-    unsafe fn destroy_fence(&self, fence: super::Fence) {}
+    unsafe fn destroy_fence(&self, _fence: super::Fence) {}
     unsafe fn get_fence_value(
         &self,
         fence: &super::Fence,

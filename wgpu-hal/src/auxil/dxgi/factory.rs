@@ -105,7 +105,7 @@ pub fn create_factory(
         // we check for whether it exists first.
         match lib_dxgi.get_debug_interface1() {
             Ok(pair) => match pair.into_result() {
-                Ok(debug_controller) => {
+                Ok(_debug_controller) => {
                     factory_flags |= d3d12::FactoryCreationFlags::DEBUG;
                 }
                 Err(err) => {

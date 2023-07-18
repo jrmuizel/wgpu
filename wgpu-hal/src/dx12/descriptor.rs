@@ -106,7 +106,7 @@ impl GeneralHeap {
 
 /// Fixed-size free-list allocator for CPU descriptors.
 struct FixedSizeHeap {
-    raw: d3d12::DescriptorHeap,
+    _raw: d3d12::DescriptorHeap,
     /// Bit flag representation of available handles in the heap.
     ///
     ///  0 - Occupied
@@ -129,7 +129,7 @@ impl FixedSizeHeap {
             handle_size: device.get_descriptor_increment_size(ty) as _,
             availability: !0, // all free!
             start: heap.start_cpu_descriptor(),
-            raw: heap,
+            _raw: heap,
         }
     }
 
@@ -221,7 +221,7 @@ impl CpuPool {
 }
 
 pub(super) struct CpuHeapInner {
-    pub raw: d3d12::DescriptorHeap,
+    pub _raw: d3d12::DescriptorHeap,
     pub stage: Vec<d3d12::CpuDescriptor>,
 }
 
@@ -248,7 +248,7 @@ impl CpuHeap {
 
         Ok(Self {
             inner: Mutex::new(CpuHeapInner {
-                raw: raw.clone(),
+                _raw: raw.clone(),
                 stage: Vec::new(),
             }),
             start: raw.start_cpu_descriptor(),

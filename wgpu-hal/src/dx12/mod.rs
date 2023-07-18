@@ -548,18 +548,13 @@ pub(super) enum CompiledShader {
 
 impl CompiledShader {
     fn create_native_shader(&self) -> d3d12::Shader {
-        match self {
+        match *self {
             CompiledShader::Dxc(ref shader) => d3d12::Shader::from_raw(shader),
-            CompiledShader::Fxc(shader) => d3d12::Shader::from_blob(shader),
+            CompiledShader::Fxc(ref shader) => d3d12::Shader::from_blob(shader),
         }
     }
 
-    unsafe fn destroy(self) {
-        match self {
-            CompiledShader::Dxc(_) => {}
-            CompiledShader::Fxc(shader) => unsafe {},
-        }
-    }
+    unsafe fn destroy(self) {}
 }
 
 pub struct RenderPipeline {
@@ -710,8 +705,8 @@ impl crate::Surface<Api> for Surface {
                 };
 
                 match &self.target {
-                    SurfaceTarget::WndHandle(_) | SurfaceTarget::SurfaceHandle(_) => {}
-                    SurfaceTarget::Visual(visual) => {
+                    &SurfaceTarget::WndHandle(_) | &SurfaceTarget::SurfaceHandle(_) => {}
+                    &SurfaceTarget::Visual(ref visual) => {
                         if let Err(err) =
                             unsafe { visual.SetContent(swap_chain1.as_unknown()) }.into_result()
                         {
@@ -778,7 +773,7 @@ impl crate::Surface<Api> for Surface {
                 //TODO: this shouldn't be needed,
                 // but it complains that the queue is still used otherwise
                 let _ = device.wait_idle();
-                let raw = sc.release_resources();
+                let _raw = sc.release_resources();
             }
         }
     }
